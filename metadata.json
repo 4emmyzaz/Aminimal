@@ -1,0 +1,8 @@
+{
+  "name": "Aminimal",
+  "description": "A minimalist task manager and note app with dark mode and deadline push notifications.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
