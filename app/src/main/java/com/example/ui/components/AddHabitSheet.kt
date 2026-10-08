@@ -36,7 +36,7 @@ fun AddHabitSheet(
     var habitName by remember { mutableStateOf("") }
     val emojis = listOf(
         "💪", "🏃", "🎨", "💧", "🧘", "🍎",
-        "✏️", "🎯", "📚", "🎨", "🎵", "🏋️",
+        "✏️", "🎯", "📚", "🖥️", "🎵", "🏋️",
         "🧠", "😴", "☀️", "🌱", "📝", "🎪",
         "🚀", "⭐", "🔥", "💡", "🌈", "🎁",
         "🏆", "💎", "🌙", "☕", "🌿", "🎬"
@@ -345,9 +345,9 @@ fun AddHabitSheet(
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            // NOTE (OPTIONAL) Section
+            // NOTES Section
             Text(
-                text = "NOTE (OPTIONAL)",
+                text = "NOTES",
                 style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

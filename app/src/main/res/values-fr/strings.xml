@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">Aminimal</string>
     <string name="tab_notes">Notes</string>
-    <string name="tab_habits">Habits</string>
-    <string name="tab_tasks">Tasks</string>
-    <string name="add_habit">Add Habit</string>
+    <string name="tab_habits">Habitudes</string>
+    <string name="tab_tasks">Tâches</string>
+    <string name="add_habit">Ajouter une habitude</string>
     <string name="notes_label">Notes</string>
     <string name="version_1_0_0">version 1.0.0</string>
 </resources>

@@ -4,6 +4,7 @@ import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -30,13 +31,11 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Layers
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.Description
 import androidx.compose.material.icons.outlined.MoreVert
-import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.DropdownMenu
@@ -69,6 +68,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontFamily
@@ -114,6 +118,47 @@ import com.example.widget.StreakGlanceWidget
 import kotlinx.coroutines.launch
 
 @Composable
+fun DashedClockIcon(
+    tint: Color,
+    modifier: Modifier = Modifier
+) {
+    Box(modifier = modifier.size(24.dp), contentAlignment = Alignment.Center) {
+        Canvas(modifier = Modifier.size(20.dp)) {
+            val strokeWidth = 2.dp.toPx()
+            val radius = size.minDimension / 2 - strokeWidth
+            val center = Offset(size.width / 2, size.height / 2)
+            
+            // Draw partially dashed circle
+            drawCircle(
+                color = tint,
+                radius = radius,
+                center = center,
+                style = Stroke(
+                    width = strokeWidth,
+                    pathEffect = PathEffect.dashPathEffect(floatArrayOf(8f, 4f), 0f)
+                )
+            )
+            
+            // Clock hands
+            drawLine(
+                color = tint,
+                start = center,
+                end = Offset(center.x + radius * 0.35f, center.y - radius * 0.35f),
+                strokeWidth = strokeWidth,
+                cap = StrokeCap.Round
+            )
+            drawLine(
+                color = tint,
+                start = center,
+                end = Offset(center.x, center.y - radius * 0.7f),
+                strokeWidth = strokeWidth * 0.8f,
+                cap = StrokeCap.Round
+            )
+        }
+    }
+}
+
+@Composable
 fun MainScreen(
     quickAction: String? = null,
     viewModel: TaskNoteViewModel = viewModel(),
@@ -156,7 +201,6 @@ fun MainScreen(
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     var currentDrawerDestination by remember { mutableStateOf(DrawerDestination.DASHBOARD) }
 
-    var isSearchActive by remember { mutableStateOf(false) }
     var showOptionsMenu by remember { mutableStateOf(false) }
     var showSettingsDialog by remember { mutableStateOf(false) }
 
@@ -280,7 +324,7 @@ fun MainScreen(
                     NavigationBarItem(
                         selected = pagerState.currentPage == 1,
                         onClick = { scope.launch { pagerState.animateScrollToPage(1) } },
-                        icon = { Icon(Icons.Outlined.CheckCircle, contentDescription = "Habits") },
+                        icon = { DashedClockIcon(tint = if (pagerState.currentPage == 1) AccentMint else TextSecondary) },
                         label = { Text("Habits") },
                         colors = NavigationBarItemDefaults.colors(
                             selectedIconColor = AccentMint,
@@ -343,7 +387,7 @@ fun MainScreen(
                     .fillMaxSize()
                     .padding(innerPadding)
             ) {
-                // Top App Header
+                // Top App Header (No search icon, no production build text)
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -368,85 +412,59 @@ fun MainScreen(
 
                         Spacer(modifier = Modifier.width(8.dp))
 
-                        Column {
-                            Text(
-                                text = "AMINIMAL",
-                                color = TextPrimary,
-                                fontSize = 19.sp,
-                                fontWeight = FontWeight.Black,
-                                letterSpacing = 2.5.sp,
-                                fontFamily = FontFamily.Monospace
-                            )
-                            Text(
-                                text = "HABITS • NOTES • TASKS",
-                                color = TextMuted,
-                                fontSize = 9.5.sp,
-                                fontWeight = FontWeight.SemiBold,
-                                letterSpacing = 1.2.sp
-                            )
-                        }
+                        Text(
+                            text = "AMINIMAL",
+                            color = TextPrimary,
+                            fontSize = 19.sp,
+                            fontWeight = FontWeight.Black,
+                            letterSpacing = 2.5.sp,
+                            fontFamily = FontFamily.Monospace
+                        )
                     }
 
-                    Row(verticalAlignment = Alignment.CenterVertically) {
+                    Box {
                         IconButton(
-                            onClick = {
-                                isSearchActive = !isSearchActive
-                                if (!isSearchActive) viewModel.setSearchQuery("")
-                            },
-                            modifier = Modifier.size(36.dp)
+                            onClick = { showOptionsMenu = true },
+                            modifier = Modifier
+                                .size(36.dp)
+                                .testTag("notification_menu_button")
                         ) {
                             Icon(
-                                imageVector = if (isSearchActive) Icons.Default.Close else Icons.Outlined.Search,
-                                contentDescription = "Search",
-                                tint = if (isSearchActive) AccentMint else TextSecondary,
+                                imageVector = Icons.Outlined.MoreVert,
+                                contentDescription = "Menu",
+                                tint = TextSecondary,
                                 modifier = Modifier.size(20.dp)
                             )
                         }
 
-                        Box {
-                            IconButton(
-                                onClick = { showOptionsMenu = true },
-                                modifier = Modifier
-                                    .size(36.dp)
-                                    .testTag("notification_menu_button")
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Outlined.MoreVert,
-                                    contentDescription = "Menu",
-                                    tint = TextSecondary,
-                                    modifier = Modifier.size(20.dp)
-                                )
-                            }
-
-                            DropdownMenu(
-                                expanded = showOptionsMenu,
-                                onDismissRequest = { showOptionsMenu = false },
-                                modifier = Modifier.background(DarkSurface)
-                            ) {
-                                DropdownMenuItem(
-                                    text = {
-                                        Text(
-                                            "Settings",
-                                            color = TextPrimary,
-                                            fontSize = 13.sp,
-                                            fontWeight = FontWeight.Medium
-                                        )
-                                    },
-                                    leadingIcon = {
-                                        Icon(
-                                            Icons.Outlined.Settings,
-                                            contentDescription = "Settings",
-                                            tint = AccentMint,
-                                            modifier = Modifier.size(18.dp)
-                                        )
-                                    },
-                                    onClick = {
-                                        showOptionsMenu = false
-                                        showSettingsDialog = true
-                                    },
-                                    modifier = Modifier.testTag("menu_settings_button")
-                                )
-                            }
+                        DropdownMenu(
+                            expanded = showOptionsMenu,
+                            onDismissRequest = { showOptionsMenu = false },
+                            modifier = Modifier.background(DarkSurface)
+                        ) {
+                            DropdownMenuItem(
+                                text = {
+                                    Text(
+                                        "Settings",
+                                        color = TextPrimary,
+                                        fontSize = 13.sp,
+                                        fontWeight = FontWeight.Medium
+                                    )
+                                },
+                                leadingIcon = {
+                                    Icon(
+                                        Icons.Outlined.Settings,
+                                        contentDescription = "Settings",
+                                        tint = AccentMint,
+                                        modifier = Modifier.size(18.dp)
+                                    )
+                                },
+                                onClick = {
+                                    showOptionsMenu = false
+                                    showSettingsDialog = true
+                                },
+                                modifier = Modifier.testTag("menu_settings_button")
+                            )
                         }
                     }
                 }
@@ -1071,7 +1089,7 @@ fun FilterChipItem(
     isSelected: Boolean,
     onClick: () -> Unit,
     testTag: String,
-    accentColor: androidx.compose.ui.graphics.Color? = null
+    accentColor: Color? = null
 ) {
     Box(
         modifier = Modifier

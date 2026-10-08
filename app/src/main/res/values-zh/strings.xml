@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Aminimal</string>
+    <string name="tab_notes">笔记</string>
+    <string name="tab_habits">习惯</string>
+    <string name="tab_tasks">任务</string>
+    <string name="add_habit">添加习惯</string>
+    <string name="notes_label">笔记</string>
+    <string name="version_1_0_0">版本 1.0.0</string>
+</resources>

@@ -1,6 +1,6 @@
 {
   "name": "Aminimal",
-  "description": "A minimalist task manager and note app with dark mode and deadline push notifications.",
+  "description": "Aminimal is an all-in-one mobile app designed to help you build and maintain positive habits, empowering you to reach your long-term goals.\nWith notes, tasks, visuals & statistics, you can easily track your progress over time.\nThe app is completely ad-free and open source.",
   "requestFramePermissions": [],
   "majorCapabilities": [
     "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"

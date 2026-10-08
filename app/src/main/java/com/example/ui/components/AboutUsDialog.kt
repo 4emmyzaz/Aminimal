@@ -71,7 +71,7 @@ fun AboutUsDialog(
                         )
                     )
                     Text(
-                        text = "version 1.5",
+                        text = "version 1.0.0",
                         style = MaterialTheme.typography.labelMedium,
                         color = MaterialTheme.colorScheme.primary
                     )
