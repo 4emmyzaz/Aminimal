@@ -1,11 +1,9 @@
-<div align="center">
-
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-
-  <h1>Built with AI Studio</h2>
-
-  <p>The fastest path from prompt to production with Gemini.</p>
-
-  <a href="https://aistudio.google.com/apps">Start building</a>
-
-</div>
+<h1 align="center">Aminimal</h1>
+<p>
+  Aminimal is an all-in-one mobile app designed to help you
+build and maintain positive habits,
+empowering you to reach your long-term goals.
+With notes, tasks, visuals & statistics,
+you can easily track your progress over time.
+The app is completely ad-free and open source.
+</p>
